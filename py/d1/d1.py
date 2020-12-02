@@ -54,21 +54,21 @@ def proliferate(env: Environment, population: List[Citizen]) -> List[Citizen]:
     l = len(population)
     one_quarter = l // 4
     fit = population[:one_quarter]
-    population = fit + mutate(env, fit) + spontaneous_combustion(env, one_quarter*2)
+    population = fit + mutate(env, fit) + spontaneous_combustion(env, l-(one_quarter*2))
     return by_fitness(env, population)
 
 @dataclass
 class Solution:
     product: int
-    iterations: int
+    generations: int
 
 def solve(env: Environment) -> Solution:
-    iterations = 0
+    generations = 0
     population = spontaneous_combustion(env)
     while population[0].fitness > 0:
         population = by_fitness(env, proliferate(env, population))
-        iterations += 1
-    return Solution(prod([env.nums[i] for i in population[0].gene]), iterations)
+        generations += 1
+    return Solution(prod([env.nums[i] for i in population[0].gene]), generations)
 
 if __name__ == "__main__":
     print(solve(Environment(2020, get_nums(), 2)))
